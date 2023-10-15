@@ -6,10 +6,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useMutation } from "react-query";
-import { authenticate } from "../axios/ApiCalls";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants/Constants";
+import { authenticate } from "../apiCalls";
+import { useContext } from "react";
+import { AppContext } from "../App";
 
-export default function Login({ setLoggedIn }) {
+export default function Login() {
+  const { setLoggedIn } = useContext(AppContext);
   const mutation = useMutation({
     mutationFn: authenticate,
   });
@@ -24,8 +26,8 @@ export default function Login({ setLoggedIn }) {
 
     try {
       const { data } = await mutation.mutateAsync(authData);
-      localStorage.setItem(ACCESS_TOKEN, data.access_token);
-      localStorage.setItem(REFRESH_TOKEN, data.refresh_token);
+      localStorage.setItem("accessToken", data.access_token);
+      localStorage.setItem("refreshToken", data.refresh_token);
       setLoggedIn(true);
     } catch {}
   };

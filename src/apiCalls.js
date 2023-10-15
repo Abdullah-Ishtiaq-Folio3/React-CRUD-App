@@ -1,9 +1,8 @@
-import apiClient from "./ApiClient";
-import { ENDPOINTS } from "../constants/Constants";
+import apiClient from "./apiClient";
 
 async function authenticate(data) {
   try {
-    const response = await apiClient.post(ENDPOINTS.LOGIN, data);
+    const response = await apiClient.post("/auth/login", data);
     return response;
   } catch (error) {
     throw error;
@@ -13,7 +12,7 @@ async function authenticate(data) {
 async function getCategories(limit) {
   try {
     const response = await apiClient.get(
-      ENDPOINTS.CATEGORIES_WITH_LIMIT + limit.toString()
+      "/categories?limit=" + limit.toString()
     );
     return response;
   } catch (error) {
@@ -23,7 +22,7 @@ async function getCategories(limit) {
 
 async function getUserProfile(token) {
   try {
-    const response = await apiClient.get(ENDPOINTS.GET_PROFILE, {
+    const response = await apiClient.get("/auth/profile", {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -36,7 +35,7 @@ async function getUserProfile(token) {
 
 async function getProducts() {
   try {
-    const response = await apiClient.get(ENDPOINTS.GET_PRODUCTS);
+    const response = await apiClient.get("/products");
     return response;
   } catch (error) {
     throw error;
@@ -45,10 +44,7 @@ async function getProducts() {
 
 async function addProduct(product) {
   try {
-    const response = await apiClient.post(
-      ENDPOINTS.ADD_UPDATE_DELETE_PRODUCT,
-      product
-    );
+    const response = await apiClient.post("/products/", product);
     return response;
   } catch (error) {
     throw error;
@@ -57,9 +53,7 @@ async function addProduct(product) {
 
 async function deleteProduct(id) {
   try {
-    const response = await apiClient.delete(
-      ENDPOINTS.ADD_UPDATE_DELETE_PRODUCT + id
-    );
+    const response = await apiClient.delete("/products/" + id);
     return response;
   } catch (error) {
     throw error;
@@ -68,10 +62,7 @@ async function deleteProduct(id) {
 
 async function updateProduct({ id, data }) {
   try {
-    const response = await apiClient.put(
-      ENDPOINTS.ADD_UPDATE_DELETE_PRODUCT + id,
-      data
-    );
+    const response = await apiClient.put("/products/" + id, data);
     return response;
   } catch (error) {
     throw error;
@@ -81,7 +72,7 @@ async function updateProduct({ id, data }) {
 async function uploadFile({ file, setProgress }) {
   try {
     const response = await apiClient.post(
-      ENDPOINTS.UPLOAD_FILE,
+      "/files/upload",
       { file: file },
       {
         onUploadProgress: (progressEvent) => {
